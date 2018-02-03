@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MarlonApi.Models;
+using Swashbuckle.AspNetCore.Swagger;
 
 
 namespace MarlonApi
@@ -29,6 +30,13 @@ namespace MarlonApi
         {
             services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
             services.AddMvc();
+
+            // Register the swagger generator defining one or more swagger document
+            services.AddSwaggerGen(c =>
+             { 
+                 c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1"});
+             });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -38,8 +46,18 @@ namespace MarlonApi
             {
                 app.UseDeveloperExceptionPage();
             }
+                // Enable middleware to serve generated Swagger as a Json endpoint
+                app.UseSwagger();
+
+                // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc), specefying the swagger JSON enpoint
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", " My API V1");
+                });
 
             app.UseMvc();
+            // http://localhost:5000/swagger/#/
+            // http://localhost:5000/swagger/v1/swagger.json
         }
     }
 }

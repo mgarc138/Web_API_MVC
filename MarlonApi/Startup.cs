@@ -34,7 +34,12 @@ namespace MarlonApi
             // Register the swagger generator defining one or more swagger document
             services.AddSwaggerGen(c =>
              { 
-                 c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1"});
+                 c.SwaggerDoc("v1", new Info { Title = "Student API",
+                  Version = "v1",
+                  Description = "ASP.Net Web API Capstone Project 2018",
+                  TermsOfService = "For Class Project Only",
+                  Contact = new Contact{ Name = "Adrian Garcia", Email = "tej18359@gmail.com"}
+                  });
              });
 
         }

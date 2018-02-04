@@ -40,6 +40,10 @@ namespace MarlonApi
                   TermsOfService = "For Class Project Only",
                   Contact = new Contact{ Name = "Adrian Garcia", Email = "tej18359@gmail.com"}
                   });
+
+                  var basePath = AppContext.BaseDirectory;
+                  var xmlPath = System.IO.Path.Combine(basePath, "MarlonApi.xml"); 
+                  c.IncludeXmlComments(xmlPath); 
              });
 
         }

@@ -42,3 +42,4 @@ D:\AdrianProject\Web_API_MVC\MarlonApi\obj\Debug\netcoreapp2.0\MarlonApi.Assembl
 D:\AdrianProject\Web_API_MVC\MarlonApi\obj\Debug\netcoreapp2.0\MarlonApi.AssemblyInfo.cs
 D:\AdrianProject\Web_API_MVC\MarlonApi\obj\Debug\netcoreapp2.0\MarlonApi.dll
 D:\AdrianProject\Web_API_MVC\MarlonApi\obj\Debug\netcoreapp2.0\MarlonApi.pdb
+D:\AdrianProject\Web_API_MVC\MarlonApi\bin\Debug\netcoreapp2.0\MarlonApi.xml

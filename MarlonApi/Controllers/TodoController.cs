@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using MarlonApi.Models;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System;
 
 namespace MarlonApi.Controllers
 {
@@ -72,6 +74,101 @@ public IActionResult Create([FromBody] TodoStudent item)
 
     return CreatedAtRoute("GetTodo", new { id = item.Id }, item);
 }
+
+
+/// <summary>
+/// Creates a student by passing student information in the parameters.
+/// </summary>
+/// <param name="Name"></param> 
+/// <param name="Address"></param>
+/// <param name="Email"></param>
+/// <param name="PhoneNumber"></param>
+/// <param name="BSEducationSchool"></param>
+/// <param name="BSEducationTitle"></param>
+/// <param name="MSEducationSchool"></param>
+/// <param name="MSEducationTitle"></param>
+/// <param name="PHdEducationSchool"></param>
+/// <param name="PHdEducationTitle"></param>
+/// <param name="WorkExperienceCompanyNameOne"></param>
+/// <param name="WorkExperienceTitleOne"></param>
+/// <param name="WorkExperienceCompanyNameTwo"></param>
+/// <param name="WorkExperienceTitleTwo"></param>
+/// <param name="WorkExperienceCompanyNameThree"></param>
+/// <param name="WorkExperienceTitleThree"></param>
+/// <param name="ExtraCurricularActivitiesOne"></param>
+/// <param name="ExtraCurricularActivitiesTwo"></param>
+[HttpPost("{Name}")]
+public IActionResult createStudentFromResume(string Name, string Address, string Email, string PhoneNumber, string BSEducationSchool, string BSEducationTitle, string MSEducationSchool, string MSEducationTitle, string PHdEducationSchool, string PHdEducationTitle, string WorkExperienceCompanyNameOne, string WorkExperienceTitleOne, string WorkExperienceCompanyNameTwo, string WorkExperienceTitleTwo, string WorkExperienceCompanyNameThree, string WorkExperienceTitleThree, string ExtraCurricularActivitiesOne, string ExtraCurricularActivitiesTwo)
+{
+
+    if(Name == null || Name.Equals("")){
+
+        return BadRequest();
+    }
+
+    if(Address == null || Address.Equals("")){
+
+        return BadRequest();
+    }
+    
+    if(Email == null || Email.Equals("")){
+  
+        return BadRequest();
+    }
+
+     if(PhoneNumber == null || PhoneNumber.Equals("")){
+  
+        return BadRequest();
+    }
+
+    string name = Name;
+    string address = Address;
+    string email = Email;
+    string phoneNumber = PhoneNumber;
+    string bsEducationSchool = BSEducationSchool;
+    string bsEducationTitle = BSEducationTitle;
+    string msEducationSchool = MSEducationSchool;
+    string msEducationTitle = MSEducationTitle;
+    string phdEducationSchool = PHdEducationSchool;
+    string phdEducationTitle = PHdEducationTitle;
+    string workExperienceCompanyNameOne = WorkExperienceCompanyNameOne;
+    string workExperienceTitleOne = WorkExperienceTitleOne;
+    string workExperienceCompanyNameTwo = WorkExperienceCompanyNameTwo;
+    string workExperienceTitleTwo = WorkExperienceTitleTwo;
+    string workExperienceCompanyNameThree = WorkExperienceCompanyNameThree;
+    string workExperienceTitleThree = WorkExperienceTitleThree;
+    string extraCurricularActivitiesOne = ExtraCurricularActivitiesOne;
+    string extraCurricularActivitiesTwo = ExtraCurricularActivitiesTwo;
+
+
+    var student =  new TodoStudent {
+          Name = name,
+          Address = address, 
+          Email = email,
+          PhoneNumber = phoneNumber, 
+          BSEducationSchool = bsEducationSchool , 
+          BSEducationTitle = bsEducationTitle,
+          MSEducationSchool = msEducationSchool,
+          MSEducationTitle = msEducationTitle,
+          PHdEducationSchool = phdEducationSchool,
+          PHdEducationTitle = phdEducationTitle,
+          WorkExperienceCompanyNameOne = workExperienceCompanyNameOne,
+          WorkExperienceTitleOne = workExperienceTitleOne, 
+          WorkExperienceCompanyNameTwo = workExperienceCompanyNameTwo,
+          WorkExperienceTitleTwo = workExperienceTitleTwo,
+          WorkExperienceCompanyNameThree = workExperienceCompanyNameThree,
+          WorkExperienceTitleThree = workExperienceTitleThree,
+          ExtraCurricularActivitiesOne = extraCurricularActivitiesOne,
+          ExtraCurricularActivitiesTwo = extraCurricularActivitiesTwo
+          };
+
+    _context.TodoItems.Add(student);
+     _context.SaveChanges();
+
+    return CreatedAtRoute("GetTodo", new { id = student.Id }, student);
+}
+
+
 
         /// <summary>
         /// Gets All Students Information

@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MarlonApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.AspNetCore.Cors;
 
 
 namespace MarlonApi
@@ -28,6 +29,9 @@ namespace MarlonApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options => {
+                options.AddPolicy("CorsPolicy", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials());
+            });
             services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
             services.AddMvc();
 
@@ -55,6 +59,8 @@ namespace MarlonApi
             {
                 app.UseDeveloperExceptionPage();
             }
+                
+                app.UseCors("CorsPolicy");
                 // Enable middleware to serve generated Swagger as a Json endpoint
                 app.UseSwagger();
 

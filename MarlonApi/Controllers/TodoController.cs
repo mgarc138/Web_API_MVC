@@ -4,6 +4,10 @@ using MarlonApi.Models;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System;
+using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
+using System.IO;
+using Microsoft.AspNetCore.Cors;
 
 namespace MarlonApi.Controllers
 {
@@ -11,6 +15,7 @@ namespace MarlonApi.Controllers
     /// <summary>
     /// Controller creation
     /// </summary>
+    [EnableCors("CorsPolicy")]
     [Produces("application/json")]
     [Route("api/student")]
     public class TodoController : Controller
@@ -258,6 +263,35 @@ public IActionResult Delete(long id)
     return new NoContentResult();
 }
 
+
+[HttpPost("UploadFiles")]
+public async Task<IActionResult> Post(List<IFormFile> files)
+{
+    long size = files.Sum(f => f.Length);
+
+    // full path to file in temp location
+    var filePath =  System.IO.Path.GetTempFileName();
+
+    foreach (var formFile in files)
+    {
+        if (formFile.Length > 0)
+        {
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await formFile.CopyToAsync(stream);
+            }
+        }
+    }
+
+    _context.TodoItems.Add(new TodoStudent { Name = "hotel", Address = "10322 asdasdas", Email = "marlon@gmail.com", PhoneNumber = "773-890-1234", BSEducationSchool = "Depaul University" , BSEducationTitle = "Computer Science", WorkExperienceCompanyNameOne = "FaceBook", WorkExperienceTitleOne = "Developer", ExtraCurricularActivitiesOne = "Programming" });
+     _context.SaveChanges();
+
+    // process uploaded files
+    // Don't rely on or trust the FileName property without validation.
+
+    return Ok(new { count = files.Count, size, filePath});
+
+    }
 
     }
 }

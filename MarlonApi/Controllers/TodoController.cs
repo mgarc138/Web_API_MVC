@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using System.IO;
 using Microsoft.AspNetCore.Cors;
+using System.Text;
 
 namespace MarlonApi.Controllers
 {
@@ -283,7 +284,7 @@ public async Task<IActionResult> Post(List<IFormFile> files)
         }
     }
 
-    _context.TodoItems.Add(new TodoStudent { Name = "hotel", Address = "10322 asdasdas", Email = "marlon@gmail.com", PhoneNumber = "773-890-1234", BSEducationSchool = "Depaul University" , BSEducationTitle = "Computer Science", WorkExperienceCompanyNameOne = "FaceBook", WorkExperienceTitleOne = "Developer", ExtraCurricularActivitiesOne = "Programming" });
+     _context.TodoItems.Add(new TodoStudent { Name = "hotel", Address = "10322 asdasdas", Email = "marlon@gmail.com", PhoneNumber = "773-890-1234", BSEducationSchool = "Depaul University" , BSEducationTitle = "Computer Science", WorkExperienceCompanyNameOne = "FaceBook", WorkExperienceTitleOne = "Developer", ExtraCurricularActivitiesOne = "Programming" });
      _context.SaveChanges();
 
     // process uploaded files
@@ -292,6 +293,169 @@ public async Task<IActionResult> Post(List<IFormFile> files)
     return Ok(new { count = files.Count, size, filePath});
 
     }
+
+
+[HttpPost("UploadApplicant")]
+public async Task<string> ReadStringDataManual()
+{
+  using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
+    {
+        var content = await reader.ReadToEndAsync();
+        //Console.Write(content);
+        string[] stringSeparators = new string[] { "\r\n" };
+        string[] lines = content.Split(stringSeparators, StringSplitOptions.None);
+        Console.WriteLine("Nr. Of items in list: " + lines.Length); // 2 lines
+       // foreach (string s in lines)
+       // {
+       //     Console.WriteLine(s); //But will print 3 lines in total.
+       // }
+       string name = "";
+       string address = "";
+       string email = "";
+       string phoneNumber = "";
+       bool education = false;
+       int educationCount = 0;
+       string bsEducationSchool = "";
+       string bsEducationTitle = "";
+       string msEducationSchool = "";
+       string msEducationTitle = "";
+       string pHdEducationSchool = "";
+       string pHdEducationTitle = "";
+       bool workExperience = false;
+       int  workExperienceCount = 0;
+       string workExperienceCompanyNameOne = "";
+       string workExperienceTitleOne = "";
+       string workExperienceCompanyNameTwo = "";
+       string workExperienceTitleTwo = "";
+       string workExperienceCompanyNameThree = "";
+       string workExperienceTitleThree = "";
+       bool extracurricularActivities = false;
+       int extracurricularActivitiesCount = 0;
+       string extraCurricularActivitiesOne = "";
+       string extraCurricularActivitiesTwo = "";
+
+       for(int i = 0; i < lines.Length; i++){
+
+            if(i > 3){
+                 //Console.WriteLine(lines[i]);
+                
+                if(lines[i].Contains("EDUCATION")){
+                    education = true;
+                    workExperience = false;
+                    extracurricularActivities = false;
+                    educationCount++;
+                }
+                
+                if(lines[i].Contains("WORK EXPERIENCE")){
+                    education = false;
+                    extracurricularActivities = false;
+                    workExperience = true;
+                    workExperienceCount++;
+                }
+
+                if(lines[i].Contains("EXTRACURRICULAR ACTIVITIES")){
+                    education = false;
+                    workExperience = false;
+                    extracurricularActivities = true;
+                    extracurricularActivitiesCount++;
+                }
+
+
+                if(i == 4){
+                    name = lines[i];
+                 }
+                 else if(i == 5){
+                    address = lines[i];
+                 }
+
+                 else if(i == 6){
+                    email = lines[i];
+                 }
+
+                 else if(i == 7){
+                     phoneNumber = lines[i];
+                 }
+
+               
+                else if(educationCount == 1 && education == true){
+                    if(lines[i].Contains("University")){
+                        bsEducationSchool = lines[i];
+                        bsEducationTitle = lines[++i];
+                        Console.WriteLine(bsEducationTitle);
+                        educationCount++;
+                    }
+                    
+                }
+
+                else if(educationCount == 2 && education == true){
+                     if(lines[i].Contains("University")){
+                         msEducationSchool = lines[i];
+                         msEducationTitle = lines[++i];
+                         educationCount++;
+                    }
+                    
+                }   
+
+                else if(educationCount == 3 && education == true){
+                     if(lines[i].Contains("University")){
+                        pHdEducationSchool = lines[i];
+                        pHdEducationTitle = lines[++i];
+                        educationCount++; 
+                    }  
+                }
+
+                
+
+                else if(workExperienceCount == 1 && workExperience == true){
+                     if(lines[i].Contains("Company")){
+                        workExperienceCompanyNameOne = lines[i];
+                        workExperienceTitleOne = lines[++i];
+                        workExperienceCount++;
+                    } 
+                }
+
+                else if(workExperienceCount == 2 && workExperience == true){
+                     if(lines[i].Contains("Company")){
+                        workExperienceCompanyNameTwo = lines[i];
+                        workExperienceTitleTwo = lines[++i];
+                        workExperienceCount++;
+                    } 
+                }
+
+                 else if(workExperienceCount == 3 && workExperience == true){
+                     if(lines[i].Contains("Company")){
+                        workExperienceCompanyNameThree = lines[i];
+                        workExperienceTitleThree = lines[++i];
+                        workExperienceCount++;
+                    } 
+                }
+
+
+                else if(extracurricularActivitiesCount == 1 && extracurricularActivities == true){
+                     if(lines[i].Contains("Activity")){
+                         extraCurricularActivitiesOne = lines[i];
+                         extracurricularActivitiesCount++;
+                    } 
+                }
+
+                 else if(extracurricularActivitiesCount == 2 && extracurricularActivities == true){
+                     if(lines[i].Contains("Activity")){
+                        extraCurricularActivitiesTwo = lines[i];
+                        extracurricularActivitiesCount++;
+                    } 
+                }
+
+            }
+       }
+        
+    _context.TodoItems.Add(new TodoStudent { Name = name, Address = address, Email = email, PhoneNumber = phoneNumber, BSEducationSchool = bsEducationSchool , BSEducationTitle = bsEducationTitle, MSEducationSchool = msEducationSchool, MSEducationTitle = msEducationTitle, PHdEducationSchool = pHdEducationSchool, PHdEducationTitle = pHdEducationTitle ,WorkExperienceCompanyNameOne = workExperienceCompanyNameOne , WorkExperienceTitleOne = workExperienceTitleOne, WorkExperienceCompanyNameTwo = workExperienceCompanyNameTwo, WorkExperienceTitleTwo = workExperienceTitleTwo, WorkExperienceCompanyNameThree = workExperienceCompanyNameThree, WorkExperienceTitleThree = workExperienceTitleThree ,ExtraCurricularActivitiesOne = extraCurricularActivitiesOne, ExtraCurricularActivitiesTwo = extraCurricularActivitiesTwo });
+     _context.SaveChanges();
+
+        return content;
+    }
+}
+
+
 
     }
 }

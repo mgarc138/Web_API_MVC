@@ -32,7 +32,10 @@ namespace MarlonApi
             services.AddCors(options => {
                 options.AddPolicy("CorsPolicy", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials());
             });
-            services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
+            //services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
+           // services.AddDbContext<TodoContext>(options => {
+        //options.UseNpgsql("ApplicantApiConnection", b => b.MigrationsAssembly("ApplicantApiConnection"));});
+            services.AddEntityFrameworkNpgsql().AddDbContext<TodoContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("ApplicantApiConnection")));
             services.AddMvc();
 
             // Register the swagger generator defining one or more swagger document

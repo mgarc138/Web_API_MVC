@@ -5,6 +5,7 @@ namespace MarlonApi.Models
 {
     public class TodoStudent
     {
+        [Key]
         public long Id { get; set; }
         [Required]
         public string Name { get; set; }
